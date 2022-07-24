@@ -19,28 +19,13 @@ data "aws_iam_policy_document" "codebuild_role_iam_policy_document" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:GetObject",
-      "s3:GetObjectVersion",
-      "s3:GetBucketVersioning",
-      "s3:PutObjectAcl",
-      "s3:PutObject"
+      "s3:*",
+      "ecr:*",
+      "ssm:*"
     ]
     resources = [
-      "${aws_s3_bucket.codebuild_bucket.arn}/*"
+      "*"
     ]
-  }
-  statement {
-    effect    = "Allow"
-    actions   = ["codestar-connections:UseConnection"]
-    resources = ["${data.aws_codestarconnections_connection.codestar_connection.arn}"]
-  }
-  statement {
-    effect = "Allow"
-    actions = [
-      "codebuild:BatchGetBuilds",
-      "codebuild:StartBuild"
-    ]
-    resources = ["*"]
   }
 }
 

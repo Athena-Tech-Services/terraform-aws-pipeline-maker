@@ -46,6 +46,13 @@ data "aws_iam_policy_document" "codepipeline_role_iam_policy_document" {
     ]
     resources = ["*"]
   }
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecs:*",
+    ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
