@@ -1,21 +1,21 @@
 data "aws_iam_policy_document" "codebuild_iam_policy_document" {
   statement {
-    actions = [ "sts:AssumeRole" ]
-    effect = "Allow"
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
     principals {
-      type = "Service"
-      identifiers = [ "codebuild.amazonaws.com" ]
+      type        = "Service"
+      identifiers = ["codebuild.amazonaws.com"]
     }
   }
 }
 
 resource "aws_iam_role" "codebuild_role" {
-  name = "codepipeline-role"
-  assume_role_policy = data.aws_iam_policy_document.codepipeline_iam_policy_document
-  path = "/ci-cd-automated-roles/"
+  name               = "codebuild-role"
+  assume_role_policy = data.aws_iam_policy_document.codebuild_iam_policy_document
+  path               = "/ci-cd-automated-roles/"
 }
 
-resource "aws_iam_policy" "codebuild_policy" {
+data "aws_iam_policy_document" "codebuild_role_iam_policy_document" {
   statement {
     effect = "Allow"
     actions = [
@@ -26,7 +26,7 @@ resource "aws_iam_policy" "codebuild_policy" {
       "s3:PutObject"
     ]
     resources = [
-      "${aws_s3_bucket.codepipeline_bucket.arn}/*"
+      "${aws_s3_bucket.codebuild_bucket.arn}/*"
     ]
   }
   statement {
@@ -42,4 +42,10 @@ resource "aws_iam_policy" "codebuild_policy" {
     ]
     resources = ["*"]
   }
+}
+
+resource "aws_iam_role_policy" "codebuild_policy" {
+  name   = "codebuild_policy"
+  role   = aws_iam_role.codebuild_role.id
+  policy = data.aws_iam_policy_document.codebuild_role_iam_policy_document
 }

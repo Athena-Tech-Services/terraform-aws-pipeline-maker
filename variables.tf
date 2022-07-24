@@ -22,6 +22,8 @@ variable "applications_details" {
       value = string
       type  = string
     }))
+    buildspec_path   = string
+    has_deploy_stage = bool
   }))
   description = "Application details for each application"
 }
@@ -29,4 +31,16 @@ variable "applications_details" {
 variable "vpc_custom" {
   type        = string
   description = "The id of the vpc"
+  default = ""
+}
+
+variable "project_name" {
+  type        = string
+  description = "project name"
+}
+
+variable "security_group_id" {
+  type        = string
+  default     = ""
+  description = "The supplied sg id"
 }

@@ -10,14 +10,14 @@ resource "aws_codebuild_project" "codebuild_project" {
   vpc_config {
     vpc_id             = local.vpc.id
     subnets            = toset(data.aws_subnets.subnets.ids)
-    security_group_ids = [data.aws_security_group.public-default-sg.id]
+    security_group_ids = [local.sg]
   }
   build_timeout  = 30
   queued_timeout = 30
-  service_role   = aws_iam_role.landing_page_build_role.arn
+  service_role   = aws_iam_role.codebuild_role.arn
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "hashicorp/terraform:${var.terraform_version}"
+    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:3.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
@@ -43,7 +43,7 @@ resource "aws_codebuild_project" "codebuild_project" {
 
   }
   source {
-    buildspec           = data.template_file.buildspec.rendered
+    buildspec           = each.value.buildspec_path
     git_clone_depth     = 0
     insecure_ssl        = false
     report_build_status = false

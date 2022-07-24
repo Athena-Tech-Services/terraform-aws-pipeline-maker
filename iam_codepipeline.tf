@@ -1,25 +1,25 @@
 data "aws_iam_policy_document" "codepipeline_iam_policy_document" {
   statement {
-    actions = [ "sts:AssumeRole" ]
-    effect = "Allow"
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
     principals {
-      type = "Service"
-      identifiers = [ "codebuild.amazonaws.com" ]
+      type        = "Service"
+      identifiers = ["codebuild.amazonaws.com"]
     }
   }
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  name = "codepipeline-role"
+  name               = "codepipeline-role"
   assume_role_policy = data.aws_iam_policy_document.codepipeline_iam_policy_document
-  path = "/ci-cd-automated-roles/"
+  path               = "/ci-cd-automated-roles/"
 }
 
 data "aws_codestarconnections_connection" "codestar_connection" {
   arn = "arn:aws:codestar-connections:eu-west-1:548616722440:connection/fd588b16-84b4-4bd4-871c-2fe4260ecbd5"
 }
 
-resource "aws_iam_policy" "codepipeline_policy" {
+data "aws_iam_policy_document" "codepipeline_role_iam_policy_document" {
   statement {
     effect = "Allow"
     actions = [
@@ -49,7 +49,8 @@ resource "aws_iam_policy" "codepipeline_policy" {
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  name = "codebuild_policy"
-  role = aws_iam_role.codepipeline_role.id
-  policy = data.aws_iam_policy_document.codepipeline_iam_policy_document
+  name   = "codepipeline_policy"
+  role   = aws_iam_role.codepipeline_role.id
+  policy = data.aws_iam_policy_document.codepipeline_role_iam_policy_document
 }
+
