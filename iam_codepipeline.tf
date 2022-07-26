@@ -4,14 +4,14 @@ data "aws_iam_policy_document" "codepipeline_iam_policy_document" {
     effect  = "Allow"
     principals {
       type        = "Service"
-      identifiers = ["codebuild.amazonaws.com"]
+      identifiers = ["codepipeline.amazonaws.com"]
     }
   }
 }
 
 resource "aws_iam_role" "codepipeline_role" {
   name               = "codepipeline-role"
-  assume_role_policy = data.aws_iam_policy_document.codepipeline_iam_policy_document
+  assume_role_policy = data.aws_iam_policy_document.codepipeline_iam_policy_document.json
   path               = "/ci-cd-automated-roles/"
 }
 
@@ -58,6 +58,6 @@ data "aws_iam_policy_document" "codepipeline_role_iam_policy_document" {
 resource "aws_iam_role_policy" "codepipeline_policy" {
   name   = "codepipeline_policy"
   role   = aws_iam_role.codepipeline_role.id
-  policy = data.aws_iam_policy_document.codepipeline_role_iam_policy_document
+  policy = data.aws_iam_policy_document.codepipeline_role_iam_policy_document.json
 }
 

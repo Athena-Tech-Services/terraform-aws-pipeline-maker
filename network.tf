@@ -1,29 +1,12 @@
-data "aws_vpc" "supplied_vpc" {
-  count = var.vpc_custom != "" ? 1 : 0
-  id    = var.vpc_custom
-}
-
-data "aws_vpc" "default_vpc" {
-  count   = var.vpc_custom == "" ? 1 : 0
-  default = true
-}
 
 locals {
-  vpc = var.vpc_custom != "" ? data.aws_vpc.supplied_vpc[0] : data.aws_vpc.default_vpc[0]
-}
-
-data "aws_subnets" "subnets" {
-  tags = {
-    Type = "Public"
+  vpc_config_temp = {
+    vpc_id             = var.vpc_id
+    subnets            = toset(var.subnets)
+    security_group_ids = var.security_group_ids
   }
-}
 
-data "aws_security_group" "public_default_sg" {
-  count  = var.security_group_id == "" ? 1 : 0
-  vpc_id = local.vpc.id
-  name   = "default"
-}
+  vpc_config = var.vpc_id != "" && length(var.subnets) != 0 && length(var.security_group_ids) != 0 ? [local.vpc_config_temp] : []
 
-locals {
-  sg = var.security_group_id != "" ? var.security_group_id : data.aws_security_group.public_default_sg[0].id
+
 }

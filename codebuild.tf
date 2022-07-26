@@ -7,11 +7,16 @@ resource "aws_codebuild_project" "codebuild_project" {
     type  = "LOCAL"
     modes = ["LOCAL_DOCKER_LAYER_CACHE", "LOCAL_SOURCE_CACHE"]
   }
-  vpc_config {
-    vpc_id             = local.vpc.id
-    subnets            = toset(data.aws_subnets.subnets.ids)
-    security_group_ids = [local.sg]
+
+  dynamic "vpc_config" {
+    for_each = local.vpc_config
+    content {
+      vpc_id             = vpc_config.vpc_id
+      subnets            = vpc_config.subnets
+      security_group_ids = vpc.security_group_ids
+    }
   }
+
   build_timeout  = 30
   queued_timeout = 30
   service_role   = aws_iam_role.codebuild_role.arn

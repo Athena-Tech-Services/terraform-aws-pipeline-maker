@@ -20,7 +20,7 @@ variable "applications_details" {
     application_codebuild_env_variables = list(object({
       name  = string
       value = string
-      type  = string
+      type  = string #PLAINTEXT or PARAMETER_STORE
     }))
     buildspec_path   = string
     has_deploy_stage = bool
@@ -28,10 +28,10 @@ variable "applications_details" {
   description = "Application details for each application"
 }
 
-variable "vpc_custom" {
+variable "vpc_id" {
   type        = string
   description = "The id of the vpc"
-  default = ""
+  default     = ""
 }
 
 variable "project_name" {
@@ -39,8 +39,14 @@ variable "project_name" {
   description = "project name"
 }
 
-variable "security_group_id" {
-  type        = string
-  default     = ""
+variable "security_group_ids" {
+  type        = list(string)
+  default     = []
   description = "The supplied sg id"
+}
+
+variable "subnets" {
+  type        = list(string)
+  description = "list of subnet ids"
+  default     = []
 }
