@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "codepipeline_iam_policy_document" {
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  name               = "codepipeline-role"
+  name               = "codepipeline-role-${var.project_name}"
   assume_role_policy = data.aws_iam_policy_document.codepipeline_iam_policy_document.json
   path               = "/ci-cd-automated-roles/"
 }

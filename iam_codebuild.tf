@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "codebuild_iam_policy_document" {
 }
 
 resource "aws_iam_role" "codebuild_role" {
-  name               = "codebuild-role"
+  name               = "codebuild-role-${var.project_name}"
   assume_role_policy = data.aws_iam_policy_document.codebuild_iam_policy_document.json
   path               = "/ci-cd-automated-roles/"
 }
