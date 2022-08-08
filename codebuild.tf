@@ -13,7 +13,7 @@ resource "aws_codebuild_project" "codebuild_project" {
     content {
       vpc_id             = vpc_config.vpc_id
       subnets            = vpc_config.subnets
-      security_group_ids = vpc.security_group_ids
+      security_group_ids = vpc_config.security_group_ids
     }
   }
 
