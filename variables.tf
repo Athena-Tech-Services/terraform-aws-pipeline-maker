@@ -50,3 +50,8 @@ variable "subnets" {
   description = "list of subnet ids"
   default     = []
 }
+
+variable "codestar_arn" {
+  type        = string
+  description = "codestar arn"
+}

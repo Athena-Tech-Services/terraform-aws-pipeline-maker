@@ -16,7 +16,7 @@ resource "aws_iam_role" "codepipeline_role" {
 }
 
 data "aws_codestarconnections_connection" "codestar_connection" {
-  arn = "arn:aws:codestar-connections:eu-west-1:548616722440:connection/fd588b16-84b4-4bd4-871c-2fe4260ecbd5"
+  arn = var.codestar_arn
 }
 
 data "aws_iam_policy_document" "codepipeline_role_iam_policy_document" {
@@ -30,12 +30,13 @@ data "aws_iam_policy_document" "codepipeline_role_iam_policy_document" {
       "s3:PutObject"
     ]
     resources = [
-      "${aws_s3_bucket.codepipeline_bucket.arn}/*"
+      "${aws_s3_bucket.codepipeline_bucket.arn}/*",
+      "${aws_s3_bucket.codepipeline_bucket.arn}"
     ]
   }
   statement {
     effect    = "Allow"
-    actions   = ["codestar-connections:UseConnection"]
+    actions   = ["codestar-connections:*"]
     resources = ["${data.aws_codestarconnections_connection.codestar_connection.arn}"]
   }
   statement {
@@ -50,6 +51,7 @@ data "aws_iam_policy_document" "codepipeline_role_iam_policy_document" {
     effect = "Allow"
     actions = [
       "ecs:*",
+      "iam:PassRole"
     ]
     resources = ["*"]
   }
