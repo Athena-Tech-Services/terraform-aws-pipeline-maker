@@ -37,7 +37,7 @@ data "aws_iam_policy_document" "codepipeline_role_iam_policy_document" {
   statement {
     effect    = "Allow"
     actions   = ["codestar-connections:*"]
-    resources = ["${data.aws_codestarconnections_connection.codestar_connection.arn}"]
+    resources = ["*"]
   }
   statement {
     effect = "Allow"
