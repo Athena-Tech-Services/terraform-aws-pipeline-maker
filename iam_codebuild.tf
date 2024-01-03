@@ -66,8 +66,23 @@ data "aws_iam_policy_document" "codebuild_role_iam_policy_document" {
   }
 }
 
+data "aws_iam_policy_document" "codebuild_role_iam_policy_document_full_access" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "*"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+}
+
+locals {
+  codebuild_iam_policy = var.iam_codebuild_full_access ? data.aws_iam_policy_document.codebuild_role_iam_policy_document_full_access.json : data.aws_iam_policy_document.codebuild_role_iam_policy_document.json
+}
 resource "aws_iam_role_policy" "codebuild_policy" {
   name   = "codebuild_policy"
   role   = aws_iam_role.codebuild_role.id
-  policy = data.aws_iam_policy_document.codebuild_role_iam_policy_document.json
+  policy = local.codebuild_iam_policy
 }

@@ -55,3 +55,15 @@ variable "codestar_arn" {
   type        = string
   description = "codestar arn"
 }
+
+variable "iam_codebuild_full_access" {
+  type        = bool
+  description = "iam codebuild full access"
+  default     = false
+}
+
+variable "codebuild_image" {
+  type        = string
+  description = "codebuild image"
+  default     = "aws/codebuild/standard:5.0"
+}
