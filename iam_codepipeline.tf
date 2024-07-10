@@ -30,8 +30,8 @@ data "aws_iam_policy_document" "codepipeline_role_iam_policy_document" {
       "s3:PutObject"
     ]
     resources = [
-      "${aws_s3_bucket.codepipeline_bucket.arn}/*",
-      "${aws_s3_bucket.codepipeline_bucket.arn}"
+      "${local.aws_s3_codepipeline_bucket[0].arn}/*",
+      "${local.aws_s3_codepipeline_bucket[0].arn}"
     ]
   }
   statement {

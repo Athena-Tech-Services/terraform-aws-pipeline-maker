@@ -1,8 +1,9 @@
+
 resource "aws_codepipeline" "codepipeline" {
   name     = "${var.project_name}-pipeline"
   role_arn = aws_iam_role.codepipeline_role.arn
   artifact_store {
-    location = aws_s3_bucket.codepipeline_bucket.bucket
+    location = local.aws_s3_codepipeline_bucket[0].bucket
     type     = "S3"
 
     encryption_key {

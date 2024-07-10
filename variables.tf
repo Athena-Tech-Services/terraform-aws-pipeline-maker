@@ -67,3 +67,15 @@ variable "codebuild_image" {
   description = "codebuild image"
   default     = "aws/codebuild/standard:5.0"
 }
+variable "use_default_artifact_s3_buckets" {
+  type        = bool
+  description = "use distinct buckets for codebuild and codepipeline"
+  default     = true
+}
+
+variable "codepipeline_bucket" {
+  type        = string
+  description = "codepipeline bucket"
+  default     = ""
+}
+
